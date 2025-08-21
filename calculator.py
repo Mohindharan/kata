@@ -1,3 +1,5 @@
+import re
+
 class Calculator:
     """
     A simple calculator that works with strings.
@@ -20,21 +22,22 @@ class Calculator:
         if not numbers:
             return 0
 
-        delimiter = ","
+        delimiters = [","]
         numbers_string = numbers
         if numbers.startswith("//"):
             # Custom delimiter logic
             delimiter_line, numbers_string = numbers.split('\n', 1)
-            # Check for new format //[delimiter]\n
-            if delimiter_line.startswith("//[") and delimiter_line.endswith("]"):
-                delimiter = delimiter_line[3:-1]
+            # Find all delimiters in brackets: e.g., //[*][%]\n
+            found_delimiters = re.findall(r'\[(.*?)\]', delimiter_line)
+            if found_delimiters:
+                delimiters = found_delimiters
             else:
-                # Fallback to old format //d\n
-                delimiter = delimiter_line[2]
+                # Fallback for single char delimiter: e.g., //;\n
+                delimiters = [delimiter_line[2]]
 
-        # Normalize all delimiters 
-        numbers_with_common_delimiter = numbers_string.replace('\n', delimiter)
-        parts = numbers_with_common_delimiter.split(delimiter)
+        # Create a regex pattern from all delimiters (custom + newline) and split the string
+        pattern = '|'.join(map(re.escape, delimiters + ['\n']))
+        parts = re.split(pattern, numbers_string)
 
         # Convert to integers, filtering out empty strings that might result from splitting
         nums = [int(p) for p in parts if p]

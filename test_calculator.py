@@ -43,3 +43,9 @@ class TestCalculator(unittest.TestCase):
 
     def test_long_custom_delimiter(self):
         self.assertEqual(self.calculator.add("//[***]\n1***2***3"), 6)
+
+    def test_multiple_custom_delimiters(self):
+        self.assertEqual(self.calculator.add("//[*][%]\n1*2%3"), 6)
+    
+    def test_multiple_custom_long_delimiters(self):
+        self.assertEqual(self.calculator.add("//[**][%]\n1**2%3"), 6)

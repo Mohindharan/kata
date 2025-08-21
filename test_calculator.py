@@ -40,3 +40,6 @@ class TestCalculator(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             self.calculator.add("//;\n1;-2;-3;4")
         self.assertEqual(str(context.exception), "negative numbers not allowed -2,-3")
+
+    def test_long_custom_delimiter(self):
+        self.assertEqual(self.calculator.add("//[***]\n1***2***3"), 6)

@@ -6,17 +6,15 @@ class Calculator:
     def add(self, numbers: str) -> int:
         """
         Calculates the sum of numbers in a string.
-
-        The numbers can be separated by default delimiters (comma or newline)
-        or by a custom delimiter. When a custom delimiter is used, newlines
-        are also treated as delimiters.
-        Format for custom delimiter: "//[delimiter]\\n[numbers...]"
-
+        
         Args:
             numbers: A string of numbers.
 
         Returns:
             The sum of the numbers.
+
+        Raises:
+            ValueError: If the input string contains negative numbers.
         """
 
         if not numbers:
@@ -32,4 +30,16 @@ class Calculator:
             # Default delimiter logic (comma and newline)
             numbers_with_common_delimiter = numbers.replace('\n', ',')
             parts = numbers_with_common_delimiter.split(',')
-        return sum(int(num) for num in parts)
+
+        # Convert to integers, filtering out empty strings that might result from splitting
+        nums = [int(p) for p in parts if p]
+
+     
+        negatives = [n for n in nums if n < 0]
+
+        # If negatives are found, raise an exception 
+        if negatives:
+            raise ValueError(f"negative numbers not allowed {','.join(map(str, negatives))}")
+
+        # Otherwise, return the sum of the numbers
+        return sum(nums)

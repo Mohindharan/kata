@@ -30,3 +30,13 @@ class TestCalculator(unittest.TestCase):
 
     def test_custom_delimiter_with_newlines_as_separator(self):
         self.assertEqual(self.calculator.add("//;\n1;2\n3"), 6)
+
+    def test_negative_number_throws_exception(self):
+        with self.assertRaises(ValueError) as context:
+            self.calculator.add("1,-2,3")
+        self.assertEqual(str(context.exception), "negative numbers not allowed -2")
+
+    def test_multiple_negative_numbers_throw_exception(self):
+        with self.assertRaises(ValueError) as context:
+            self.calculator.add("//;\n1;-2;-3;4")
+        self.assertEqual(str(context.exception), "negative numbers not allowed -2,-3")
